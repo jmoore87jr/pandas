@@ -32,7 +32,7 @@ def run(numrows, maxrows):
 
 if __name__ == "__main__":
     numrows = 10
-    maxrows = 100000000 # 100 million
+    maxrows = 10000000 # 10 million
 
     run(numrows, maxrows)
 
