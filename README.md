@@ -1,3 +1,10 @@
+# Instructions
+
+running merge.py will generate the dummy dataframes, merge and sort them, and print information about the time and memory used.
+
+chunks.py shows how to dump the data into a SQLite database in chunks to decrease memory usage.
+
+
 # Pandas
 
 We use `merge()` instead of the faster `join()` because we need to join on columns rather than indexes.
@@ -10,4 +17,6 @@ Tips for using Pandas with large data:
 * Use `categorical (enumerate)` instead of `object (string)` data type when possible
 * Downcast numeric columns using `pd.to_numeric()`
 * Use chunking (note: if processing requires coordination between chunks, don't use Pandas)
+
+
 
