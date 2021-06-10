@@ -1,6 +1,6 @@
 # Instructions
 
-running merge.py will generate the dummy dataframes, merge and sort them, and print information about the time and memory used.
+use merge_and_sort.ipynb to benchmark Pandas for data of different sizes.
 
 chunks.py shows how to dump the data into a SQLite database in chunks to decrease memory usage.
 
