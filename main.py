@@ -12,9 +12,6 @@ from credentials import *
 * CISIL data is fixed width
 """
 
-PIPE_DELIMITED_FILES = ['s3://mnnk/pipe_data1.csv', 's3://mnnk/pipe_data2.csv', 's3://mnnk/pipe_data3.csv']
-FIXED_WIDTH_FILE = 's3://mnnk/fw_data.csv'
-
 def concat_dfs(csvs, sep=',', fwf=False):
     """ 
     * take a list of pandas dataframes and concatenate them vertically
@@ -24,6 +21,10 @@ def concat_dfs(csvs, sep=',', fwf=False):
 
     # turn the list of csvs into a list of Pandas dataframes
     dfs = [ pd.read_fwf(file) if fwf else pd.read_csv(file, sep=sep) for file in csvs ]
+
+    print("Original dataframes:")
+    for df in dfs:
+        print(df)
 
     # concatenate dataframes and reset index
     result = pd.concat(dfs, ignore_index=True)
@@ -38,6 +39,8 @@ def load_from_s3():
     df2 = pd.read_fwf(FIXED_WIDTH_FILE)
 
     print("Loaded files from s3")
+    print(df1)
+    print(df2)
 
     return [df1,df2]
 
