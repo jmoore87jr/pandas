@@ -1,8 +1,28 @@
 # Instructions
 
-use merge_and_sort.ipynb to benchmark Pandas for data of different sizes.
+1. Make a credentials.py file that looks like this:
 
-chunks.py shows how to dump the data into a SQLite database in chunks to decrease memory usage.
+```
+# S3 Credentials
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+REGION_NAME = ''
+
+# RDS Credentials
+USERNAME = ''
+PASSWORD = ''
+DATABASE_ENDPOINT = ''
+PORT = ''
+DATABASE_NAME = ''
+
+# S3 Files
+PIPE_DELIMITED_FILES = list_of_s3_files
+FIXED_WIDTH_FILE = s3_file
+```
+
+2. Use merge_and_sort.ipynb to benchmark Pandas for data of different sizes.
+
+3. chunks.py shows how to dump the data into a SQLite database in chunks to decrease memory usage.
 
 
 # Pandas
