@@ -7,9 +7,13 @@ from credentials import *
 # TODO: have load_from_s3 take *args and return a list of dataframes of any length
 
 """ 
-* join DSAMS and CISIL data from S3 using Pandas
-* DSAMS data is pipe delimited and the ID columns need to be combined to match the CISIL ID column
-* CISIL data is fixed width
+1. Load data from s3
+2. Concatenate
+3. Merge on new ID column
+4. Save to postgres
+
+* df1 data is pipe delimited and the ID columns need to be combined to match the df2 ID column
+* df2 data is fixed width
 """
 
 def concat_dfs(csvs, sep=',', fwf=False):
@@ -38,7 +42,7 @@ def load_from_s3():
     # fixed width
     df2 = pd.read_fwf(FIXED_WIDTH_FILE)
 
-    print("Loaded files from s3")
+    print("Loaded files from s3 and concatenated:")
     print(df1)
     print(df2)
 
