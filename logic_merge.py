@@ -12,12 +12,32 @@ from credentials import *
 * CISIL data is fixed width
 """
 
+PIPE_DELIMITED_FILES = ['s3://mnnk/pipe_data1.csv', 's3://mnnk/pipe_data2.csv', 's3://mnnk/pipe_data3.csv']
+FIXED_WIDTH_FILE = 's3://mnnk/fw_data.csv'
+
+def concat_dfs(csvs, sep=',', fwf=False):
+    """ 
+    * take a list of pandas dataframes and concatenate them vertically
+    * sep is the delimiter
+    * fwf indicates whether the file is fixed width as opposed to delimited
+    """
+
+    # turn the list of csvs into a list of Pandas dataframes
+    dfs = [ pd.read_fwf(file) if fwf else pd.read_csv(file, sep=sep) for file in csvs ]
+
+    # concatenate dataframes and reset index
+    result = pd.concat(dfs, ignore_index=True)
+    
+    return result
+
 def load_from_s3():
    # pipe delimited
-    df1 = pd.read_csv('s3://mnnk/pipe_data.csv', sep='|')
+    df1 = concat_dfs(PIPE_DELIMITED_FILES)
 
     # fixed width
-    df2 = pd.read_fwf('s3://mnnk/fw_data.csv')
+    df2 = pd.read_fwf(FIXED_WIDTH_FILE)
+
+    print("Loaded files from s3")
 
     return [df1,df2]
 
@@ -30,6 +50,7 @@ def merge_dfs(df1, df2):
     # merge the dataframes on ID and sort by ID
     result = df1.merge(df2, left_on='ID', right_on='ID').sort_values(by='ID')
 
+    print("Merged dataframes")
     print(result)
 
     return result
@@ -68,6 +89,7 @@ def save_to_rds(df):
 
 
 if __name__ == "__main__":
+    
     dfs = load_from_s3()
 
     df = merge_dfs(dfs[0], dfs[1])
