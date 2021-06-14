@@ -4,6 +4,8 @@ from sqlalchemy import create_engine
 import psycopg2
 from credentials import *
 
+# df.apply(lambda row: <remove last char from row>)
+
 # TODO: have load_from_s3 take *args and return a list of dataframes of any length
 
 """ 
@@ -62,7 +64,7 @@ def merge_dfs(df1, df2):
 
     return result
 
-def save_to_rds(df):
+def save_to_postgres(df):
     try:
         # connect to database
         conn = psycopg2.connect(
@@ -102,4 +104,4 @@ if __name__ == "__main__":
 
     df = merge_dfs(dfs[0], dfs[1])
 
-    save_to_rds(df)
+    save_to_postgres(df)
