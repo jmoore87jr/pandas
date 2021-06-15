@@ -32,8 +32,14 @@ def concat_dfs(csvs, sep=',', fwf=False):
     for df in dfs:
         print(df)
 
+    # strip the last column (caused by extra pipe at the end of each line)
+    dfs = [ df.iloc[:, :-1] for df in dfs ]
+
     # concatenate dataframes and reset index
     result = pd.concat(dfs, ignore_index=True)
+
+    print("New dataframe:")
+    print(result)
     
     return result
 
