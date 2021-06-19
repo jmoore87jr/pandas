@@ -101,7 +101,7 @@ def view_table(conn, engine, table):
     # execute QUERY
     df = pd.read_sql_query(f'SELECT * FROM "{table}"', con=engine)
 
-    print(f"-----Final Table----- \n {df}")
+    print(f"-----Current Table----- \n {df}")
 
 
 if __name__ == "__main__":
