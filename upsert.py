@@ -4,11 +4,12 @@ from sqlalchemy import create_engine, text
 import psycopg2
 from credentials import *
 
-# TODO: I think my table from pd.to_sql is not the same format as the one being upserted
-#  1. try to CREATE TABLE in SQL instead of using pd.to_sql
-#  2. ***I think the ID column has to be type UNIQUE to use ON CONFLICT
 
 def generate_dummy_dfs():
+    """
+    Create two DataFrames to test Pandas -> Postgres upsert functionality
+    """
+
     df1 = pd.DataFrame({'ID': [1001, 1002, 1003, 1004],
     'Item': ['Hello', 'World', 'Foo', 'Bar'],
     'Date': ['12-OCT-06',
@@ -37,6 +38,8 @@ def generate_dummy_dfs():
     return [df1, df2]
 
 def connect_to_db():
+    """Connect to Postgres database"""
+
     try:
         # connect to database
         conn = psycopg2.connect(
@@ -58,6 +61,10 @@ def connect_to_db():
 
 
 def create_table(df, table, conn, engine):
+    """
+    Create our table in Postgres
+    Change column names to match your data
+    """
 
     engine.execute(f"DROP TABLE IF EXISTS {table}")
 
@@ -77,8 +84,13 @@ def create_table(df, table, conn, engine):
 
 
 def upsert(df, table, conn, engine):
+    """
+    "Merge" new data into existing Postgres database, 
+    replacing old data when a new row ID matches an
+    existing one
+    """
     
-    # upsert Postgres database from Pandas dataframe
+    # change column names to fit any DataFrame
     sql = text(f""" 
             INSERT INTO {table} ("ID", "Item", "Date", "Date2", "Date3")
             VALUES {','.join([str(i) for i in list(df.to_records(index=False))])}
@@ -96,7 +108,7 @@ def upsert(df, table, conn, engine):
     engine.execute(sql)
 
 
-def view_table(conn, engine, table):
+def query_table(conn, engine, table):
 
     # execute QUERY
     df = pd.read_sql_query(f'SELECT * FROM "{table}"', con=engine)
@@ -111,13 +123,15 @@ if __name__ == "__main__":
 
     create_table(dfs[0], 'table2', conn, engine)
 
+    # add first table to database
     upsert(dfs[0], 'table2', conn, engine)
 
-    view_table(conn, engine, 'table2')
+    query_table(conn, engine, 'table2')
 
+    # upsert second table to database
     upsert(dfs[1], 'table2', conn, engine)
 
-    view_table(conn, engine, 'table2')
+    query_table(conn, engine, 'table2')
 
     conn.commit()
     print("Changes committed")
